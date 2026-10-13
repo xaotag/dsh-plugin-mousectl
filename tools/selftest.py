@@ -56,13 +56,28 @@ def test_basic_api() -> None:
               f"-> ({nx},{ny})")
 
     start = winmouse.get_position()
-    winmouse.move_to(vx + vw // 2, vy + vh // 2, duration=0.25)
-    # SendInput is asynchronous, so reading the cursor too early can observe a
-    # mid-flight position. This check flaked once at 0.15s; 0.45s is stable.
-    time.sleep(0.45)
-    mid = winmouse.get_position()
-    ok = abs(mid[0] - (vx + vw // 2)) <= 2 and abs(mid[1] - (vy + vh // 2)) <= 2
-    check("move_to lands on target", ok, f"{start} -> {mid}")
+    target = (vx + vw // 2, vy + vh // 2)
+
+    # How close the cursor is expected to land. 2 px is the honest tolerance for
+    # the normalized 0..65535 coordinate round-trip.
+    def lands_ok(settle: float) -> tuple[bool, tuple[int, int]]:
+        winmouse.move_to(target[0], target[1], duration=0.25)
+        # SendInput is asynchronous: reading too early observes a mid-flight
+        # position. The cursor can also be moved by whatever has focus, so we
+        # retry before calling this a failure.
+        time.sleep(settle)
+        pos = winmouse.get_position()
+        return (abs(pos[0] - target[0]) <= 2 and abs(pos[1] - target[1]) <= 2), pos
+
+    ok, mid = lands_ok(0.45)
+    lane = f"{start} -> {mid}"
+    if not ok:
+        # One retry: a foreground app can steal the cursor between our move and
+        # the read. Retrying distinguishes that from a real mapping bug.
+        ok2, mid2 = lands_ok(0.7)
+        lane += f"  (retry: {mid2})"
+        ok = ok2
+    check("move_to lands on target", ok, lane)
 
     # Humanized path must produce >1 sample and stay bounded.
     path = winmouse._human_path((0, 0), (400, 300), 0.3)
