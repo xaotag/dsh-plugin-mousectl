@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Node
+node_modules/
+pnpm-lock.yaml
+package-lock.json
+
+# Test artefacts produced by tools/*.py at runtime.
+# Only curated proof images under docs/images/ are tracked.
+*.log
+vis-*.png
+cf-*.png
+ts-upright-before.png
+ts-upright-after.png
+proof-*.png
+probe-*.png
+*-crop.png
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+.idea/

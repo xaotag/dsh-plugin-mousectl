@@ -1,0 +1,51 @@
+{
+  "name": "dsh-plugin-mousectl",
+  "version": "1.0.0",
+  "description": "Real, humanized Win32 system-level mouse input for DeepSeek Harness (SendInput, not synthetic DOM events)",
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis",
+    "mouse",
+    "automation",
+    "win32",
+    "sendinput"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "python",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xaotag/dsh-plugin-mousectl.git"
+  },
+  "homepage": "https://github.com/xaotag/dsh-plugin-mousectl#readme",
+  "bugs": {
+    "url": "https://github.com/xaotag/dsh-plugin-mousectl/issues"
+  },
+  "os": [
+    "win32"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*"
+  }
+}

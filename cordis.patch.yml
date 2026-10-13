@@ -1,0 +1,8 @@
+# dsh-plugin-mousectl bundle patch.
+#
+# A bundle patch is a "- insert:" list of loader rows, not a bare entry list.
+# A bare entry is read as an *override* of an existing row id, so the plugin
+# then reports rows: [] and never registers its tools (a silent no-op).
+- insert:
+    - id: mousectl
+      name: 'dsh-plugin-mousectl'
